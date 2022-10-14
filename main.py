@@ -4,6 +4,7 @@ from collections import OrderedDict
 abeceda = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 cisla = '0123456789'
 
+
 def filtraceKlice(klic):
 
     # odstranění diakritiky
@@ -19,6 +20,7 @@ def filtraceKlice(klic):
 
     return klic
 
+
 def filtraceTextu(text):
 
     # odstranění diakritiky
@@ -31,6 +33,7 @@ def filtraceTextu(text):
     text = ''.join(znak if znak in abeceda else '' for znak in text)
 
     return text
+
 
 def vytvoritTabulku(klic):
     klic = filteredKey
@@ -66,9 +69,10 @@ def vytvoritTabulku(klic):
             index += 1
     return matrix
 
+
 def separate_same_letters(text):
     index = 0
-    while (index<len(text)):
+    while (index < len(text)):
         l1 = text[index]
         if index == len(text)-1:
             text = text + 'X'
@@ -77,19 +81,20 @@ def separate_same_letters(text):
         l2 = text[index+1]
         if l1 == l2:
             text = text[:index+1] + "X" + text[index+1:]
-        index +=2
+        index += 2
     return text
 
-def indexOf(letter,matrix):
-    for i in range (5):
+
+def indexOf(letter, matrix):
+    for i in range(5):
         try:
             index = matrix[i].index(letter)
-            return (i,index)
+            return (i, index)
         except:
             continue
 
-def sifrovat(text, klic):
-    matrix = vytvoritTabulku(klic)
+
+def sifrovat(text, matrix):
     cipher_text = ''
     for (l1, l2) in zip(text[0::2], text[1::2]):
         row1, col1 = indexOf(l1, matrix)
@@ -103,8 +108,9 @@ def sifrovat(text, klic):
 
     return " ".join(cipher_text[i:i + 5] for i in range(0, len(cipher_text), 5))
 
-def desifrovat(text, klic):
-    matrix = vytvoritTabulku(klic)
+
+def desifrovat(text, matrix):
+    text = text.replace(" ", "")
     cipher_text = ''
     for (l1, l2) in zip(text[0::2], text[1::2]):
         row1, col1 = indexOf(l1, matrix)
@@ -115,24 +121,30 @@ def desifrovat(text, klic):
             cipher_text += matrix[(row1 - 1) % 5][col1] + matrix[(row2 - 1) % 5][col2]
         else:  # Rule 4, the letters are in a different row and column
             cipher_text += matrix[row1][col2] + matrix[row2][col1]
-    cipher_text = cipher_text.replace(" ", "")
     cipher_text = cipher_text.replace("XSPACEX", " ")
     return cipher_text
+
 
 if __name__ == "__main__":
     klic = None
     while (klic == None):
-        klic = input("Zadej klíč: ")
-        filteredKey = filtraceKlice(klic)
+        filteredKey = filtraceKlice(input("Zadej klíč: "))
         if len(filteredKey) < 4:
-            klic = None
-            print("Minimální délka klíče musí být 4 znaky a bez čísel, zkus to znovu.")
-            continue
+            print("Minimální délka klíče musí být 4 neduplicitni znaky a bez čísel, zkus to znovu.")
+        else:
+            klic = filteredKey
 
-        print("Filtrace klíče: " + filteredKey)
-    print(vytvoritTabulku(klic))
+    matrix = vytvoritTabulku(klic)
+    print(matrix)
+
     text = filtraceTextu(input("Zadej text pro šifrování: "))
-    print("Filtrace textu: " + text)
-    print(separate_same_letters(text))
-    print(sifrovat(text, klic))
-    print(desifrovat(text, klic))
+    print("Zadaný text po filtraci: " + text)
+
+    text = separate_same_letters(text)
+    print("Zadaný text po rozdeleni stejnych pismen: " + text)
+
+    cipher = sifrovat(text, matrix)
+    print("Šifrovaný text: " + cipher)
+
+    decipher = desifrovat(cipher, matrix)
+    print("Znovu dešifrovaný text: " + decipher)
