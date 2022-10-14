@@ -15,12 +15,12 @@ def filtraceKlice(klic):
     klic = klic.replace(" ", "")
     # velká písmena
     klic = klic.upper()
+    # j==i
+    klic = klic.replace("J", "I")
     # odstranění dalších znaků
     klic = ''.join(znak if znak in abeceda else '' for znak in klic)
     # odstranění duplicit
     klic = "".join(OrderedDict.fromkeys(klic))
-    # j==i
-    klic = klic.replace("J", "I")
 
     return klic
 
@@ -33,10 +33,10 @@ def filtraceTextu(text):
     text = text.replace(" ", "XSPACEX")
     # velká písmena
     text = text.upper()
-    # odstranění dalších znaků
-    text = ''.join(znak if znak in abeceda else '' for znak in text)
     # j==i
     text = text.replace("J", "I")
+    # odstranění dalších znaků
+    text = ''.join(znak if znak in abeceda else '' for znak in text)
 
     return text
 
@@ -109,7 +109,7 @@ def make_matrix(key):
 
 
 def get_avaiable_separator(text):
-    for char in abeceda:
+    for char in abeceda.replace("J", "I"):  # J==I
         if not char in text:
             # choose character not used in text as separator
             return char
