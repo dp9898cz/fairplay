@@ -1,13 +1,18 @@
 import unicodedata
 
 from alphabet import abeceda
-
+from numbers import numbers
 
 def filtraceTextu(text, lan):
     # odstranění diakritiky
     text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode()
     # konvertování mezer
     text = text.replace(" ", "XSPACEX")
+    
+    #nahrazeni cisel za text
+    for number in numbers:
+        text = text.replace(number, numbers[number])
+    
     # velká písmena
     text = text.upper()
     # j==i

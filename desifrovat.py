@@ -1,4 +1,6 @@
 
+from numbers import numbers
+
 def indexOf(letter, matrix):
     for i in range(5):
         try:
@@ -25,17 +27,6 @@ def desifrovat(text, matrix):
 
 def finalize(text, separator, separator2):
     text = text.replace("XSPACEX", " ")
-    resolved = False
-    while (not resolved) and len(text) != 0:
-        for idx, char in enumerate(text):
-            if (char == separator or char == separator2):
-                if (idx > 0 and idx < len(text) - 2 and (text[(idx - 1)] != text[idx + 1]) and text[(idx - 1)] != text[idx]):
-                    # delete separator
-                    text = text[:idx] + text[idx + 1:]
-                    break
-            if (idx == len(text) - 1):
-                # reached the end, we can safely mark this string as resolved
-                resolved = True
-    if (text[len(text) - 1] == separator or text[len(text) - 1] == separator2):
-        text = text[:len(text) - 1]
+    for number in numbers:
+        text = text.replace(numbers[number], number)
     return text
